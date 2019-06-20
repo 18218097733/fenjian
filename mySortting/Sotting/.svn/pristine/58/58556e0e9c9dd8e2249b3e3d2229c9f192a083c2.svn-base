@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using ThridLibray;
+
+namespace UI.IUI
+{
+    public partial class Form_equipment : Form
+    {
+        public Form_equipment()
+        {
+            InitializeComponent();
+        }
+
+        // 设备对象
+        private IDevice m_dev;
+
+        private void Form_equipment_Load(object sender, EventArgs e)
+        {
+            //设备搜索
+            List<IDeviceInfo> li = Enumerator.EnumerateDevices();
+            if (li.Count > 0)
+            {
+                dgvList.DataSource = li;
+                for(int i=0;i<li.Count;i++)
+                {
+                    cBUSB.Items.Add(Enumerator.GetDeviceByIndex(i));
+                }
+                // 获取搜索到的第一个设备
+                m_dev = Enumerator.GetDeviceByIndex(0);
+            }
+
+        }
+        private void btConnect_Click(object sender, EventArgs e)
+        {
+            FormMain formMain = new FormMain();
+            formMain.Tag = cBUSB.SelectedIndex;
+            formMain.Show();
+            this.Hide();
+        }
+    }
+}

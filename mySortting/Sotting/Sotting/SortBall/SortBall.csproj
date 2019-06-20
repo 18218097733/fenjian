@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SortCommon\SortCommon.csproj" />
+    <ProjectReference Include="..\SortDal\SortDal.csproj" />
+    <ProjectReference Include="..\SortModel\SortModel.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,8 @@
+D:\工作文档\111\mySortting\Sotting\SortDal\bin\Debug\netstandard1.4\SortDal.deps.json
+D:\工作文档\111\mySortting\Sotting\SortDal\bin\Debug\netstandard1.4\SortDal.dll
+D:\工作文档\111\mySortting\Sotting\SortDal\bin\Debug\netstandard1.4\SortDal.pdb
+D:\工作文档\111\mySortting\Sotting\SortDal\obj\Debug\netstandard1.4\SortDal.csprojAssemblyReference.cache
+D:\工作文档\111\mySortting\Sotting\SortDal\obj\Debug\netstandard1.4\SortDal.csproj.CoreCompileInputs.cache
+D:\工作文档\111\mySortting\Sotting\SortDal\obj\Debug\netstandard1.4\SortDal.AssemblyInfo.cs
+D:\工作文档\111\mySortting\Sotting\SortDal\obj\Debug\netstandard1.4\SortDal.dll
+D:\工作文档\111\mySortting\Sotting\SortDal\obj\Debug\netstandard1.4\SortDal.pdb

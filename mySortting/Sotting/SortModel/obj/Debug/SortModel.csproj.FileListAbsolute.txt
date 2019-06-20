@@ -1,0 +1,11 @@
+D:\工作文档\111\mySortting\Sotting\SortModel\bin\Debug\SortModel.dll
+D:\工作文档\111\mySortting\Sotting\SortModel\bin\Debug\SortModel.pdb
+D:\工作文档\111\mySortting\Sotting\SortModel\obj\Debug\SortModel.csproj.CoreCompileInputs.cache
+D:\工作文档\111\mySortting\Sotting\SortModel\obj\Debug\SortModel.dll
+D:\工作文档\111\mySortting\Sotting\SortModel\obj\Debug\SortModel.pdb
+D:\工作文档\111\mySortting\Sotting\SortModel\obj\Debug\SortModel.csprojAssemblyReference.cache
+D:\工作文档\mySortting\mySortting\Sotting\SortModel\obj\Debug\SortModel.dll
+D:\工作文档\mySortting\mySortting\Sotting\SortModel\obj\Debug\SortModel.pdb
+D:\工作文档\mySortting\mySortting\Sotting\SortModel\bin\Debug\SortModel.dll
+D:\工作文档\mySortting\mySortting\Sotting\SortModel\bin\Debug\SortModel.pdb
+D:\工作文档\mySortting\mySortting\Sotting\SortModel\obj\Debug\SortModel.csproj.CoreCompileInputs.cache

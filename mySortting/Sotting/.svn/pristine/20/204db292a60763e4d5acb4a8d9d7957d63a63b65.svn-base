@@ -1,0 +1,174 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using HalconDotNet;
+using SortCommon;
+using ThridLibray;
+
+namespace UI.IUI
+{
+    public partial class FormMain : Form
+    {        
+        public FormMain()
+        {
+            InitializeComponent();
+        }
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            LoadFormInfo();
+        }
+        // 设备对象
+        private IDevice m_dev;
+        private HalconHelper halconHelper;
+        private void LoadFormInfo()
+        {
+            try
+            {
+                halconHelper = new HalconHelper(hWindowControl1.HalconWindow);
+
+                if (Convert.ToInt32(this.Tag) != -1)
+                {
+
+                    m_dev = Enumerator.GetDeviceByIndex(Convert.ToInt32(this.Tag));
+                    // 注册链接时间
+
+                    m_dev.CameraOpened += OnCameraOpen;
+                    m_dev.ConnectionLost += OnConnectLoss;
+                    m_dev.CameraClosed += OnCameraClose;
+                    // 打开设备
+                    if (!m_dev.Open())
+                    {
+                        MessageBox.Show(@"连接相机失败");
+                        return;
+                    }
+
+                    // 关闭Trigger
+                    //m_dev.TriggerSet.Close();
+                    // 打开Software Trigger
+                    m_dev.TriggerSet.Open(TriggerSourceEnum.Software);
+                    // 设置图像格式
+                    using (IEnumParameter p = m_dev.ParameterCollection[ParametrizeNameSet.ImagePixelFormat])
+                    {
+                        p.SetValue("Mono8");
+                    }
+
+                    // 注册码流回调事件
+                    m_dev.StreamGrabber.ImageGrabbed += OnImageGrabbed;
+
+                    // 开启码流
+                    if (!m_dev.GrabUsingGrabLoopThread())
+                    {
+                        MessageBox.Show(@"开启码流失败");
+                        return;
+                    }
+                    else
+                    {
+                        m_dev.ExecuteSoftwareTrigger();
+                    }
+                }
+                //注册一维码识别完成事件
+                halconHelper.Complete += OnComplete;
+            }
+            catch(Exception ex)
+            {
+                Catcher.Show(ex);
+            }
+
+        }
+
+        private void OnComplete(object sender, OnCompleteEventArgs e)
+        {
+            int i = 0;
+        }
+
+
+        //相机回流事件
+        private void OnImageGrabbed(object sender, GrabbedEventArgs e)
+        {
+            HObject image;
+            HOperatorSet.GenImage1(out image, "byte", e.GrabResult.Width, e.GrabResult.Height, e.GrabResult.Raw);
+
+            // 转换帧数据为Bitmap
+            //var bitmap = e.GrabResult.ToBitmap(false);
+            //Bitmap2HObject(bitmap,out image);
+            //bitmap.Dispose();
+            halconHelper.BarRecognition(image);
+            m_dev.ExecuteSoftwareTrigger();
+
+        }
+
+
+        // 相机打开回调
+        private void OnCameraOpen(object sender, EventArgs e)
+        {
+            HalconHelper halconHelper= new HalconHelper(hWindowControl1.HalconWindow);
+            this.Invoke(new Action(()=>{
+                lbtitle.Text = "相机已连接";
+            }));
+        }
+        // 相机关闭回调
+        private void OnCameraClose(object sender, EventArgs e)
+        {
+            this.Invoke(new Action(() => {
+                lbtitle.Text = "相机未连接";
+            }));
+        }
+
+        // 相机丢失回调
+        private void OnConnectLoss(object sender, EventArgs e)
+        {
+            m_dev.ShutdownGrab();
+            m_dev.Dispose();
+            m_dev = null;
+            this.Invoke(new Action(() => {
+                lbtitle.Text = "相机异常关闭";
+            }));
+
+        }
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                m_dev.TriggerSet.Close();
+               // m_dev.Close();
+            }
+            catch(Exception ex)
+            {
+                Catcher.Show(ex);
+            }
+            System.Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// 暂时用不上,会增加工作量
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="image"></param>
+        // C# bitmap变量转为 halcon变量
+        private void Bitmap2HObject(Bitmap bmp, out HObject image)
+        {
+            try
+            {
+                Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+                BitmapData srcBmpData = bmp.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
+
+                HOperatorSet.GenImage1(out image, "byte", bmp.Width, bmp.Height, srcBmpData.Scan0);
+                bmp.UnlockBits(srcBmpData);
+            }
+            catch (Exception ex)
+            {
+                image = null;
+            }
+        }
+
+    }
+}

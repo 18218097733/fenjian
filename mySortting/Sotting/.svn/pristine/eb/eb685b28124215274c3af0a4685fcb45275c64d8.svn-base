@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HalconDotNet;
+
+namespace SortCommon
+{
+    public partial class HalconHelper
+    {
+        private static HTuple hv_ExpDefaultWinHandle;
+
+        public event EventHandler<OnCompleteEventArgs> Complete;
+        public HalconHelper(HTuple Window)
+        {
+            HOperatorSet.SetSystem("do_low_error", "false");
+            hv_ExpDefaultWinHandle = Window;
+        }
+
+        public void BarRecognition(HObject ho_Image)
+        {
+            HTuple hv_BarCodeHandle = new HTuple();
+            HTuple hv_MeasThreshAbsValue = new HTuple();
+            HObject ho_SymbolRegions = null,ho_BarCodeObjects = null,ho_ObjectSelected;
+            HTuple hv_CodeTypes = new HTuple();
+            HTuple hv_DecodedDataStrings = new HTuple(),hv_DecodedDataTypes = new HTuple();
+            HTuple hv_J = new HTuple();
+            string Codetype;
+
+            try
+            {
+                // Initialize local and output iconic variables        
+                HOperatorSet.GenEmptyObj(out ho_SymbolRegions);
+                HOperatorSet.GenEmptyObj(out ho_BarCodeObjects);
+                HOperatorSet.GenEmptyObj(out ho_ObjectSelected);
+
+                HTuple Pointer, type, Width, Height;
+                HOperatorSet.GetImagePointer1(ho_Image, out Pointer, out type, out Width, out Height);
+                HOperatorSet.SetPart(hv_ExpDefaultWinHandle, 0, 0, Height, Width);
+
+                HOperatorSet.DispObj(ho_Image, hv_ExpDefaultWinHandle);
+
+                hv_MeasThreshAbsValue = 10.0;
+                hv_CodeTypes = "auto";
+                HOperatorSet.SetDraw(hv_ExpDefaultWinHandle, "margin");
+                HOperatorSet.SetLineWidth(hv_ExpDefaultWinHandle, 10);
+
+                HOperatorSet.CreateBarCodeModel(new HTuple(), new HTuple(), out hv_BarCodeHandle);
+                HOperatorSet.SetBarCodeParam(hv_BarCodeHandle, "meas_thresh_abs", hv_MeasThreshAbsValue);
+                ho_SymbolRegions.Dispose();
+                HOperatorSet.FindBarCode(ho_Image, out ho_SymbolRegions, hv_BarCodeHandle, hv_CodeTypes, out hv_DecodedDataStrings);
+
+                ho_BarCodeObjects.Dispose();
+                HOperatorSet.GetBarCodeObject(out ho_BarCodeObjects, hv_BarCodeHandle, "all", "symbol_regions");
+
+                HOperatorSet.GetBarCodeResult(hv_BarCodeHandle, "all", "decoded_types", out hv_DecodedDataTypes);
+                for (hv_J = 0; (int)hv_J <= (int)((new HTuple(hv_DecodedDataStrings.TupleLength())) - 1); hv_J = (int)hv_J + 1)
+                {
+                    Codetype = hv_DecodedDataTypes[hv_J].S;
+                    if (Codetype == "Code 128"|| Codetype == "EAN-13"|| Codetype == "Code 39"|| Codetype == "Code 93")
+                    {
+                        HOperatorSet.SetColor(hv_ExpDefaultWinHandle, "forest green");
+                        HOperatorSet.SelectObj(ho_BarCodeObjects, out ho_ObjectSelected, hv_J + 1);
+                        HOperatorSet.DispObj(ho_ObjectSelected, hv_ExpDefaultWinHandle);
+
+                        if (Complete != null)
+                        {
+                            this.Complete(this, new OnCompleteEventArgs(hv_DecodedDataStrings[hv_J].S, Codetype));
+                        }
+                    }
+
+                }
+                HOperatorSet.ClearBarCodeModel(hv_BarCodeHandle);
+                ho_Image.Dispose();
+                ho_SymbolRegions.Dispose();
+                ho_BarCodeObjects.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+            }
+
+        }
+        public static void Action(HObject ho_Image)
+        {
+
+        }
+
+    }
+    /// <summary>
+    /// 一维码识别完成事件
+    /// </summary>
+    public class OnCompleteEventArgs
+    {
+        public string DataStrings { get; private set; }
+        public string DataTypes { get; private set; }
+        public OnCompleteEventArgs(string Datastr,string Dataty)
+        {
+            this.DataStrings = Datastr;
+            this.DataStrings = Dataty;
+        }
+    }
+}

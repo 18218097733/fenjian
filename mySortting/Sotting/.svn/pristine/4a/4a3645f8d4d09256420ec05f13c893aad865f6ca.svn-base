@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SortCommon\SortCommon.csproj" />
+    <ProjectReference Include="..\SortDal\SortDal.csproj" />
+    <ProjectReference Include="..\SortModel\SortModel.csproj" />
+  </ItemGroup>
+
+</Project>

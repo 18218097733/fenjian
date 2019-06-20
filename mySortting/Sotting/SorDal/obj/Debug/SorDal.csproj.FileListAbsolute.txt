@@ -1,0 +1,14 @@
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\SorDal.dll
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\SorDal.pdb
+D:\工作文档\111\mySortting\Sotting\SorDal\obj\Debug\SorDal.csprojAssemblyReference.cache
+D:\工作文档\111\mySortting\Sotting\SorDal\obj\Debug\SorDal.csproj.CoreCompileInputs.cache
+D:\工作文档\111\mySortting\Sotting\SorDal\obj\Debug\SorDal.dll
+D:\工作文档\111\mySortting\Sotting\SorDal\obj\Debug\SorDal.pdb
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\SortCommon.dll
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\SortModel.dll
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\halcondotnet.dll
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\SortCommon.pdb
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\SortModel.pdb
+D:\工作文档\111\mySortting\Sotting\SorDal\obj\Debug\SorDal.csproj.CopyComplete
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\System.Data.SQLite.dll
+D:\工作文档\111\mySortting\Sotting\SorDal\bin\Debug\System.Data.SQLite.xml
